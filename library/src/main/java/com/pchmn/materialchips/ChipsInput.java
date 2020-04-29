@@ -46,7 +46,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
     // attributes
     private static final int NONE = -1;
     private String mHint;
-    private int mTextSize;
+    private float mTextSize;
     private ColorStateList mHintColor;
     private ColorStateList mTextColor;
     private int mMaxRows = 2;
@@ -108,6 +108,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
                 mHint = a.getString(R.styleable.ChipsInput_hint);
                 mHintColor = a.getColorStateList(R.styleable.ChipsInput_hintColor);
                 mTextColor = a.getColorStateList(R.styleable.ChipsInput_textColor);
+                mTextSize = a.getDimension(R.styleable.ChipsInput_textSize, 12.0f);
                 mMaxRows = a.getInteger(R.styleable.ChipsInput_maxRows, 2);
                 setMaxHeight(ViewUtil.dpToPx((40 * mMaxRows) + 8));
                 //setVerticalScrollBarEnabled(true);
@@ -218,8 +219,8 @@ public class ChipsInput extends ScrollViewMaxHeight {
     }
 
     public ChipsInputEditText getEditText() {
-        if(mEditText == null) {
-             mEditText = new ChipsInputEditText(mContext);
+        if (mEditText == null) {
+            mEditText = new ChipsInputEditText(mContext);
         }
 
         if (mHintColor != null)
