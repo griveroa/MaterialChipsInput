@@ -2,18 +2,22 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 9
-        versionName "1.0.8"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 10
+        versionName "1.0.9"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        packagingOptions {
+            exclude "lib/mips/*.so"
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false

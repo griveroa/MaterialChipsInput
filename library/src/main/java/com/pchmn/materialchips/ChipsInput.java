@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 
@@ -37,12 +39,14 @@ public class ChipsInput extends ScrollViewMaxHeight {
     // context
     private Context mContext;
     // xml element
-    @BindView(R2.id.chips_recycler) RecyclerView mRecyclerView;
+    @BindView(R2.id.chips_recycler)
+    RecyclerView mRecyclerView;
     // adapter
     private ChipsAdapter mChipsAdapter;
     // attributes
     private static final int NONE = -1;
     private String mHint;
+    private int mTextSize;
     private ColorStateList mHintColor;
     private ColorStateList mTextColor;
     private int mMaxRows = 2;
@@ -66,6 +70,8 @@ public class ChipsInput extends ScrollViewMaxHeight {
     private FilterableListView mFilterableListView;
     // chip validator
     private ChipValidator mChipValidator;
+
+    private ChipsInputEditText mEditText;
 
     public ChipsInput(Context context) {
         super(context);
@@ -91,7 +97,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
         ButterKnife.bind(this, rootView);
 
         // attributes
-        if(attrs != null) {
+        if (attrs != null) {
             TypedArray a = mContext.getTheme().obtainStyledAttributes(
                     attrs,
                     R.styleable.ChipsInput,
@@ -113,7 +119,8 @@ public class ChipsInput extends ScrollViewMaxHeight {
                 mChipDeletable = a.getBoolean(R.styleable.ChipsInput_chip_deletable, false);
                 mChipDeleteIconColor = a.getColorStateList(R.styleable.ChipsInput_chip_deleteIconColor);
                 int deleteIconId = a.getResourceId(R.styleable.ChipsInput_chip_deleteIcon, NONE);
-                if(deleteIconId != NONE) mChipDeleteIcon = ContextCompat.getDrawable(mContext, deleteIconId);
+                if (deleteIconId != NONE)
+                    mChipDeleteIcon = ContextCompat.getDrawable(mContext, deleteIconId);
                 // chip background color
                 mChipBackgroundColor = a.getColorStateList(R.styleable.ChipsInput_chip_backgroundColor);
                 // show chip detailed
@@ -125,8 +132,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
                 // filterable list
                 mFilterableListBackgroundColor = a.getColorStateList(R.styleable.ChipsInput_filterable_list_backgroundColor);
                 mFilterableListTextColor = a.getColorStateList(R.styleable.ChipsInput_filterable_list_textColor);
-            }
-            finally {
+            } finally {
                 a.recycle();
             }
         }
@@ -143,7 +149,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
         // set window callback
         // will hide DetailedOpenView and hide keyboard on touch outside
         Activity activity = ActivityUtil.scanForActivity(mContext);
-        if(activity == null)
+        if (activity == null)
             throw new ClassCastException("android.view.Context cannot be cast to android.app.Activity");
 
         android.view.Window.Callback mCallBack = (activity).getWindow().getCallback();
@@ -212,13 +218,18 @@ public class ChipsInput extends ScrollViewMaxHeight {
     }
 
     public ChipsInputEditText getEditText() {
-        ChipsInputEditText editText = new ChipsInputEditText(mContext);
-        if(mHintColor != null)
-            editText.setHintTextColor(mHintColor);
-        if(mTextColor != null)
-            editText.setTextColor(mTextColor);
+        if(mEditText == null) {
+             mEditText = new ChipsInputEditText(mContext);
+        }
 
-        return editText;
+        if (mHintColor != null)
+            mEditText.setHintTextColor(mHintColor);
+        if (mTextColor != null)
+            mEditText.setTextColor(mTextColor);
+        if (mTextSize > -1)
+            mEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize);
+
+        return mEditText;
     }
 
     public DetailedChipView getDetailedChipView(ChipInterface chip) {
@@ -236,25 +247,25 @@ public class ChipsInput extends ScrollViewMaxHeight {
     }
 
     public void onChipAdded(ChipInterface chip, int size) {
-        for(ChipsListener chipsListener: mChipsListenerList) {
+        for (ChipsListener chipsListener : mChipsListenerList) {
             chipsListener.onChipAdded(chip, size);
         }
     }
 
     public void onChipRemoved(ChipInterface chip, int size) {
-        for(ChipsListener chipsListener: mChipsListenerList) {
+        for (ChipsListener chipsListener : mChipsListenerList) {
             chipsListener.onChipRemoved(chip, size);
         }
     }
 
     public void onTextChanged(CharSequence text) {
-        if(mChipsListener != null) {
-            for(ChipsListener chipsListener: mChipsListenerList) {
+        if (mChipsListener != null) {
+            for (ChipsListener chipsListener : mChipsListenerList) {
                 chipsListener.onTextChanged(text);
             }
             // show filterable list
-            if(mFilterableListView != null) {
-                if(text.length() > 0)
+            if (mFilterableListView != null) {
+                if (text.length() > 0)
                     mFilterableListView.filterList(text);
                 else
                     mFilterableListView.fadeOut();
@@ -357,7 +368,9 @@ public class ChipsInput extends ScrollViewMaxHeight {
 
     public interface ChipsListener {
         void onChipAdded(ChipInterface chip, int newSize);
+
         void onChipRemoved(ChipInterface chip, int newSize);
+
         void onTextChanged(CharSequence text);
     }
 

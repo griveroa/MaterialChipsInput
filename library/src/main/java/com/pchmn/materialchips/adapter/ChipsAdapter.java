@@ -281,9 +281,9 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             // notify listener
             mChipsInput.onChipAdded(chip, mChipList.size());
             // hide hint
-            mEditText.setHint(null);
+//            mEditText.setHint(null);
             // reset text
-            mEditText.setText(null);
+//            mEditText.setText(null);
             // refresh data
             notifyItemInserted(mChipList.size());
         }
