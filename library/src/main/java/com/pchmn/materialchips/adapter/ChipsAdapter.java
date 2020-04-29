@@ -2,11 +2,10 @@ package com.pchmn.materialchips.adapter;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
 import com.pchmn.materialchips.views.ChipsInputEditText;
 import com.pchmn.materialchips.views.DetailedChipView;
-import com.pchmn.materialchips.model.Chip;
 import com.pchmn.materialchips.util.ViewUtil;
 import com.pchmn.materialchips.views.FilterableListView;
 
@@ -121,9 +119,7 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void initEditText() {
-        mEditText.setLayoutParams(new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        mEditText.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         mEditText.setHint(mHintLabel);
         mEditText.setBackgroundResource(android.R.color.transparent);
         // prevent fullscreen on landscape
@@ -167,9 +163,8 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void autofitEditText() {
-        // min width of edit text = 50 dp
         ViewGroup.LayoutParams params = mEditText.getLayoutParams();
-        params.width = ViewUtil.dpToPx(50);
+        params.width = ViewUtil.dpToPx(100);
         mEditText.setLayoutParams(params);
 
         // listen to change in the tree
@@ -190,13 +185,8 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 mEditText.requestFocus();
 
                 // remove the listener:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    mEditText.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                } else {
-                    mEditText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
+                mEditText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
-
         });
     }
 
@@ -278,13 +268,7 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void addChip(ChipInterface chip) {
         if(!listContains(mChipList, chip)) {
             mChipList.add(chip);
-            // notify listener
             mChipsInput.onChipAdded(chip, mChipList.size());
-            // hide hint
-            mEditText.setHint(null);
-            // reset text
-            mEditText.setText(null);
-            // refresh data
             notifyItemInserted(mChipList.size());
         }
     }

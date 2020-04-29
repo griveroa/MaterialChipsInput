@@ -2,28 +2,32 @@ package com.pchmn.sample.materialchipsinput;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.toString();
-    @BindView(R.id.contacts_button) Button mContactListButton;
-    @BindView(R.id.custom_chips_button) Button mCustomChipsButton;
+    Button mContactListButton;
+    Button mCustomChipsButton;
     private int mStackLevel = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // butter knife
-        ButterKnife.bind(this);
+
+        mContactListButton = findViewById(R.id.contacts_button);
+        mCustomChipsButton = findViewById(R.id.custom_chips_button);
+
+        Button b = findViewById(R.id.dialog_fragment);
+        b.setOnClickListener(v -> {
+            showDialog();
+        });
+
 
         mContactListButton.setOnClickListener(view -> {
             startActivity(new Intent(MainActivity.this, ContactListActivity.class));
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.dialog_fragment)
+
     public void showDialog() {
         mStackLevel++;
 
