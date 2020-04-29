@@ -5,15 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.EditText;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.pchmn.materialchips.adapter.ChipsAdapter;
@@ -30,16 +29,12 @@ import com.pchmn.materialchips.views.ScrollViewMaxHeight;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class ChipsInput extends ScrollViewMaxHeight {
 
     private static final String TAG = ChipsInput.class.toString();
     // context
     private Context mContext;
     // xml element
-    @BindView(R2.id.chips_recycler)
     RecyclerView mRecyclerView;
     // adapter
     private ChipsAdapter mChipsAdapter;
@@ -93,8 +88,6 @@ public class ChipsInput extends ScrollViewMaxHeight {
     private void init(AttributeSet attrs) {
         // inflate layout
         View rootView = inflate(getContext(), R.layout.chips_input, this);
-        // butter knife
-        ButterKnife.bind(this, rootView);
 
         // attributes
         if (attrs != null) {
@@ -137,6 +130,8 @@ public class ChipsInput extends ScrollViewMaxHeight {
                 a.recycle();
             }
         }
+
+        mRecyclerView = rootView.findViewById(R.id.chips_recycler);
 
         // adapter
         mChipsAdapter = new ChipsAdapter(mContext, this, mRecyclerView);
