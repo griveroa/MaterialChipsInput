@@ -223,7 +223,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
         if (mTextColor != null)
             mEditText.setTextColor(mTextColor);
         if (mTextSize > -1)
-            mEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTextSize);
+            mEditText.setTextSize(mTextSize);
 
         return mEditText;
     }
