@@ -269,6 +269,7 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(!listContains(mChipList, chip)) {
             mChipList.add(chip);
             mChipsInput.onChipAdded(chip, mChipList.size());
+            mEditText.setHint(null);
             notifyItemInserted(mChipList.size());
         }
     }
